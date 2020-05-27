@@ -186,7 +186,7 @@ public class Game extends AppCompatActivity {
         Log.e("answet", answer);
         Log.e("rev_anser", rev_answer);
         Log.e("operation_anwer", operation_answer);
-        if(operation_answer.length() == 1 ){
+        if(operation_answer.length() == 1 && (operation_class.getResult() != 0) ){
             operation_answer = "0"+operation_answer;
         }
 
