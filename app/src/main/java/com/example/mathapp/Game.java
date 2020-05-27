@@ -183,15 +183,19 @@ public class Game extends AppCompatActivity {
         String answer = respuesta;
         String rev_answer = revers_string(respuesta);
         String operation_answer =  String.valueOf((int)(operation_class.getResult()));
-
+        Log.e("answet", answer);
+        Log.e("rev_anser", rev_answer);
+        Log.e("operation_anwer", operation_answer);
         if(operation_answer.length() == 1 ){
             operation_answer = "0"+operation_answer;
         }
 
+        System.out.println(operation_answer.equals(answer));
+        System.out.println(operation_answer.equals(rev_answer));
 
         boolean flag = false;
 
-        if (answer == operation_answer || rev_answer == operation_answer){
+        if (answer.equals(operation_answer) || rev_answer.equals(operation_answer)){
             flag = true;
         }
 
