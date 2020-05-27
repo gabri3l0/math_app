@@ -181,15 +181,17 @@ public class Game extends AppCompatActivity {
     public void checkResult(){
 
         String answer = respuesta;
-        int reverse_answer = reversDigits(Integer.valueOf(answer));
-        String reverse_answer_2 = "-1";
-        if (reverse_answer>10 && reverse_answer>0){
-            reverse_answer_2 = "0" + String.valueOf(reverse_answer);
+        String rev_answer = revers_string(respuesta);
+        String operation_answer =  String.valueOf((int)(operation_class.getResult()));
+
+        if(operation_answer.length() == 1 ){
+            operation_answer = "0"+operation_answer;
         }
+
 
         boolean flag = false;
 
-        if (answer == String.valueOf((int)(operation_class.getResult())) || reversDigits(Integer.valueOf(answer)) == operation_class.getResult() || (reverse_answer_2 == answer)){
+        if (answer == operation_answer || rev_answer == operation_answer){
             flag = true;
         }
 
@@ -241,5 +243,17 @@ public class Game extends AppCompatActivity {
         }
 
         return (negativeFlag == true)? -rev_num : rev_num;
+    }
+
+    public String revers_string(String input)
+    {
+
+        // convert String to character array
+        // by using toCharArray
+        char[] try1 = input.toCharArray();
+        String ans = "";
+        for (int i = try1.length-1; i>=0; i--)
+            ans += try1[i];
+        return ans;
     }
 }
