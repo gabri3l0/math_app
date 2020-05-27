@@ -33,15 +33,21 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Button start_button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        start_button = (Button) findViewById(R.id.button);
+    }
 
+    public void startGame(View view){
+        Intent intent = new Intent(this, Game.class);
+        startActivity(intent);
     }
     // Makes an api post to predict with knn the numbers
     public void checkResults(View view){
-
         // get Image
         ImageView image =(ImageView)findViewById(R.id.image);
         // encode image to base64 string
