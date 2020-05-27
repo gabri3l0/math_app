@@ -180,11 +180,16 @@ public class Game extends AppCompatActivity {
 
     public void checkResult(){
 
-        int answer = Integer.parseInt(respuesta);
+        String answer = respuesta;
+        int reverse_answer = reversDigits(Integer.valueOf(answer));
+        String reverse_answer_2 = "-1";
+        if (reverse_answer>10 && reverse_answer>0){
+            reverse_answer_2 = "0" + String.valueOf(reverse_answer);
+        }
 
         boolean flag = false;
 
-        if (answer == operation_class.getResult() || reversDigits(answer) == operation_class.getResult()){
+        if (answer == String.valueOf((int)(operation_class.getResult())) || reversDigits(Integer.valueOf(answer)) == operation_class.getResult() || (reverse_answer_2 == answer)){
             flag = true;
         }
 
@@ -196,7 +201,7 @@ public class Game extends AppCompatActivity {
             operation_class = new MathOperations();
         }
         else {
-            Toast.makeText(this, "EQUIVOCADO",
+            Toast.makeText(this, ("EQUIVOCADO. Número obtenido: "+ String.valueOf(respuesta)),
                     Toast.LENGTH_LONG).show();
         }
 
