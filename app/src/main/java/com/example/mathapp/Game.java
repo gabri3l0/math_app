@@ -188,6 +188,8 @@ public class Game extends AppCompatActivity {
         Log.e("operation_anwer", operation_answer);
         if(operation_answer.length() == 1 && (operation_class.getResult() != 0) ){
             operation_answer = "0"+operation_answer;
+            answer = "0"+answer;
+            rev_answer = "0"+rev_answer;
         }
 
         System.out.println(operation_answer.equals(answer));
