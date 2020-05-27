@@ -36,6 +36,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
+import com.example.mathapp.MathOperations;
 
 public class Game extends AppCompatActivity {
 
@@ -43,6 +44,7 @@ public class Game extends AppCompatActivity {
     private TextView number1, number2, operation;
     private PaintView paintView;
     private String respuesta;
+    private MathOperations operation_class;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,7 @@ public class Game extends AppCompatActivity {
         paintView = (PaintView) findViewById(R.id.drawing);
         erase = (Button) findViewById(R.id.erase_btn);
         save = (Button) findViewById(R.id.save_btn);
+        operation_class  = new MathOperations();
         number1 = (TextView) findViewById(R.id.a);
         number2 = (TextView) findViewById(R.id.b);
         operation = (TextView) findViewById(R.id.operation);
@@ -91,8 +94,8 @@ public class Game extends AppCompatActivity {
             RequestQueue queue = Volley.newRequestQueue(this);
 
             // Endpoint API
-            String url ="http://192.168.1.83:5000/getMathAnswer";
-            //String url ="https://math-engine-api.herokuapp.com/getMathAnswer";
+            //String url ="http://192.168.1.83:5000/getMathAnswer";
+            String url ="https://math-engine-api.herokuapp.com/getMathAnswer";
 
 
             // Get screen size
@@ -167,46 +170,30 @@ public class Game extends AppCompatActivity {
 
 
     public void randomTest(){
-        // Select operator
-        String [] operations = {" + "," - "," * "," / "};
-        operation.setText(operations[new Random().nextInt(operations.length)]);
+
+        operation.setText(operation_class.getOperation());
 
         // Select numbers
-        number1.setText(Integer.toString(new Random().nextInt(10)));
-        number2.setText(Integer.toString(new Random().nextInt(10)));
+        number1.setText(String.valueOf(operation_class.getFirst_number()));
+        number2.setText(String.valueOf(operation_class.getSecond_number()));
     }
 
     public void checkResult(){
 
-        int number1Int = Integer.parseInt(number1.getText().toString());
-        int number2Int = Integer.parseInt(number2.getText().toString());
         int answer = Integer.parseInt(respuesta);
 
         boolean flag = false;
 
-        // Operation
-        switch (operation.getText().toString()){
-            case(" + "):
-                if (number1Int+number2Int==answer){
-                    flag = true;
-                }
-            case(" - "):
-                if (number1Int-number2Int==answer){
-                    flag = true;
-                }
-            case(" * "):
-                if (number1Int*number2Int==answer){
-                    flag = true;
-                }
-            case(" / "):
-                if (number1Int/number2Int==answer){
-                    flag = true;
-                }
+        if (answer == operation_class.getResult() || reversDigits(answer) == operation_class.getResult()){
+            flag = true;
         }
+
+
         // Answer announcement
         if (flag) {
             Toast.makeText(this, "CORRECTO",
                     Toast.LENGTH_LONG).show();
+            operation_class = new MathOperations();
         }
         else {
             Toast.makeText(this, "EQUIVOCADO",
@@ -215,5 +202,39 @@ public class Game extends AppCompatActivity {
 
         // Reset paintView
         paintView.setErase(true);
+    }
+
+    private int reversDigits(int num)
+    {
+        // Handling negative numbers
+        boolean negativeFlag = false;
+        if (num < 0)
+        {
+            negativeFlag = true;
+            num = -num ;
+        }
+
+        int prev_rev_num = 0, rev_num = 0;
+        while (num != 0)
+        {
+            int curr_digit = num%10;
+
+            rev_num = (rev_num*10) + curr_digit;
+
+            // checking if the reverse overflowed or not.
+            // The values of (rev_num - curr_digit)/10 and
+            // prev_rev_num must be same if there was no
+            // problem.
+            if ((rev_num - curr_digit)/10 != prev_rev_num)
+            {
+                System.out.println("WARNING OVERFLOWED!!!");
+                return 0;
+            }
+
+            prev_rev_num = rev_num;
+            num = num/10;
+        }
+
+        return (negativeFlag == true)? -rev_num : rev_num;
     }
 }
